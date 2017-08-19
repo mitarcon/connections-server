@@ -5,7 +5,7 @@ import java.math.BigInteger;
 import lombok.Data;
 
 @Data
-public class Greetting {
+public class Greeting {
 	private BigInteger id;
 	private String text;
 }
