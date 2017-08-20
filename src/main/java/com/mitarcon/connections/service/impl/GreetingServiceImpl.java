@@ -5,6 +5,8 @@ import java.util.Collection;
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mitarcon.connections.domain.GreetingEntity;
 import com.mitarcon.connections.repository.GreetingRepository;
@@ -13,6 +15,9 @@ import com.mitarcon.connections.service.dto.GreetingDTO;
 import com.mitarcon.connections.util.DozerUtil;
 
 @Service
+@Transactional(
+	propagation=Propagation.SUPPORTS,
+	readOnly=true)
 public class GreetingServiceImpl implements GreetingService {
 
 	@Autowired
@@ -35,14 +40,26 @@ public class GreetingServiceImpl implements GreetingService {
 		return output;
 	}
 	@Override
+	@Transactional(
+			propagation=Propagation.REQUIRED,
+			readOnly=false)
 	public GreetingDTO create(GreetingDTO greeting) {
 		// TODO Auto-generated method stub
+		
+		GreetingEntity aux = greetingRepository.save(
+				mapper.map(greeting, GreetingEntity.class));
+		
+		// Ilustar rollback
+		if (aux.getId() == 4){
+			throw new RuntimeException("Roll me back transaccion");
+		}
 		return mapper.map(
-				greetingRepository.save(
-						mapper.map(greeting, GreetingEntity.class)),
-				GreetingDTO.class);
+				aux, GreetingDTO.class);
 	}
 	@Override
+	@Transactional(
+			propagation=Propagation.REQUIRED,
+			readOnly=false)
 	public GreetingDTO update(GreetingDTO greeting) {
 		// TODO Auto-generated method stub
 		return mapper.map(
@@ -51,6 +68,9 @@ public class GreetingServiceImpl implements GreetingService {
 				GreetingDTO.class);
 	}
 	@Override
+	@Transactional(
+			propagation=Propagation.REQUIRED,
+			readOnly=false)
 	public void delete(int id) {
 		// TODO Auto-generated method stub
 		greetingRepository.delete(id);
