@@ -1,6 +1,5 @@
 package com.mitarcon.connections.web.rest;
 
-import java.math.BigInteger;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class GreetingsController {
 	
 	@GetMapping(value="/greeting/{id}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GreetingDTO> getGreeting(@PathVariable("id") BigInteger id){
+	public ResponseEntity<GreetingDTO> getGreeting(@PathVariable("id") int id){
 		log.info("Call : " + "getGreeting() " + "-- PathVariable: " + id);
 		GreetingDTO greeting = greetingService.FindOne(id);
 		if (greeting == null){
@@ -50,7 +49,7 @@ public class GreetingsController {
 	@PutMapping(value="/greeting/{id}",
 			produces=MediaType.APPLICATION_JSON_VALUE,
 			consumes=MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<GreetingDTO> updateGreeting(@PathVariable("id") BigInteger id,
+	public ResponseEntity<GreetingDTO> updateGreeting(@PathVariable("id") int id,
 			@RequestBody GreetingDTO greeting){
 		
 		log.info("Call : " + "updateGreeting() " + "-- RequestBody: " + greeting.toString());
@@ -63,7 +62,7 @@ public class GreetingsController {
 	}
 	
 	@DeleteMapping(value="/greeting/{id}")
-	public ResponseEntity<GreetingDTO> deleteGreeting(@PathVariable("id") BigInteger id){
+	public ResponseEntity<GreetingDTO> deleteGreeting(@PathVariable("id") int id){
 		log.info("Call : " + "deleteGreeting() " + "-- PathVariable: " + id);
 		greetingService.delete(id);
 		return new ResponseEntity<GreetingDTO>(HttpStatus.NO_CONTENT);

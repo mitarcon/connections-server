@@ -1,6 +1,5 @@
 package com.mitarcon.connections.service.impl;
 
-import java.math.BigInteger;
 import java.util.Collection;
 
 import org.dozer.DozerBeanMapper;
@@ -11,7 +10,6 @@ import com.mitarcon.connections.domain.GreetingEntity;
 import com.mitarcon.connections.repository.GreetingRepository;
 import com.mitarcon.connections.service.GreetingService;
 import com.mitarcon.connections.service.dto.GreetingDTO;
-
 import com.mitarcon.connections.util.DozerUtil;
 
 @Service
@@ -30,7 +28,7 @@ public class GreetingServiceImpl implements GreetingService {
 		return DozerUtil.mapCollection(mapper, greetings, GreetingDTO.class);
 	}
 	@Override
-	public GreetingDTO FindOne(BigInteger id) {
+	public GreetingDTO FindOne(int id) {
 		// TODO Auto-generated method stub
 		GreetingEntity greeting = greetingRepository.findOne(id);
 		GreetingDTO output = mapper.map(greeting, GreetingDTO.class);
@@ -53,7 +51,7 @@ public class GreetingServiceImpl implements GreetingService {
 				GreetingDTO.class);
 	}
 	@Override
-	public void delete(BigInteger id) {
+	public void delete(int id) {
 		// TODO Auto-generated method stub
 		greetingRepository.delete(id);
 	}
