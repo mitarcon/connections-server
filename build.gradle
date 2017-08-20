@@ -43,4 +43,9 @@ dependencies {
 	compile('net.sf.dozer:dozer:5.4.0') {
 		exclude group: 'org.slf4j'
 	}
+	
+//	Added caching to aplication
+	compile("org.springframework.boot:spring-boot-starter-cache")
+// https://mvnrepository.com/artifact/com.google.guava/guava
+	compile ('com.google.guava:guava:23.0')
 }

@@ -4,6 +4,9 @@ import java.util.Collection;
 
 import org.dozer.DozerBeanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +36,9 @@ public class GreetingServiceImpl implements GreetingService {
 		return DozerUtil.mapCollection(mapper, greetings, GreetingDTO.class);
 	}
 	@Override
+	@Cacheable(
+			value="greeting",
+			key="#id")
 	public GreetingDTO FindOne(int id) {
 		// TODO Auto-generated method stub
 		GreetingEntity greeting = greetingRepository.findOne(id);
@@ -43,6 +49,9 @@ public class GreetingServiceImpl implements GreetingService {
 	@Transactional(
 			propagation=Propagation.REQUIRED,
 			readOnly=false)
+	@CachePut(
+			value="greeting",
+			key="#result.id")
 	public GreetingDTO create(GreetingDTO greeting) {
 		// TODO Auto-generated method stub
 		
@@ -60,6 +69,9 @@ public class GreetingServiceImpl implements GreetingService {
 	@Transactional(
 			propagation=Propagation.REQUIRED,
 			readOnly=false)
+	@CachePut(
+			value="greeting",
+			key="#result.id")
 	public GreetingDTO update(GreetingDTO greeting) {
 		// TODO Auto-generated method stub
 		return mapper.map(
@@ -71,9 +83,20 @@ public class GreetingServiceImpl implements GreetingService {
 	@Transactional(
 			propagation=Propagation.REQUIRED,
 			readOnly=false)
+	@CacheEvict(
+			value="greeting",
+			key="#id")
 	public void delete(int id) {
 		// TODO Auto-generated method stub
 		greetingRepository.delete(id);
+	}
+	@Override
+	@CacheEvict(
+			value="greeting",
+			allEntries=true)
+	public void evitCache() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

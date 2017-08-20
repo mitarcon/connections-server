@@ -11,4 +11,5 @@ public interface GreetingService {
 	GreetingDTO create(GreetingDTO greeting);
 	GreetingDTO update(GreetingDTO greeting);
 	void delete(int id);
+	void evitCache();
 }
