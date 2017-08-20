@@ -2,95 +2,60 @@ package com.mitarcon.connections.service.impl;
 
 import java.math.BigInteger;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.dozer.DozerBeanMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.mitarcon.connections.domain.Greeting;
+import com.mitarcon.connections.domain.GreetingEntity;
+import com.mitarcon.connections.repository.GreetingRepository;
 import com.mitarcon.connections.service.GreetingService;
+import com.mitarcon.connections.service.dto.GreetingDTO;
+
+import com.mitarcon.connections.util.DozerUtil;
 
 @Service
 public class GreetingServiceImpl implements GreetingService {
 
-	
-	private static BigInteger nextId;
-	private static Map<BigInteger, Greeting> greetingMap;
-	
-	private static Greeting save(Greeting greting){
-		if (greetingMap == null){
-			greetingMap = new HashMap<BigInteger, Greeting>();
-			nextId = BigInteger.ONE;
-		}
-		
-//		If update
-		if (greting.getId() != null){
-			Greeting greetingOld = greetingMap.get(greting.getId());
-			if (greetingOld == null){
-				return null;
-			}
-			greetingMap.remove(greting.getId());
-			greetingMap.put(greting.getId(), greting);
-			return greting;
-		}
-		
-//		If create
-		greting.setId(nextId);
-		greetingMap.put(nextId, greting);
-		nextId = nextId.add(BigInteger.ONE);
-		return greting;
-	}
-	
-	private static boolean remove(BigInteger id){
-		Greeting greeting = greetingMap.remove(id);
-		if (greeting == null) {
-			return false;
-		} else {
-			return true;
-		}
-	}
-	
-	static {
-		Greeting aux = new Greeting ();
-		aux.setText("Mensaje 1");
-		save(aux);
-		
-		aux = new Greeting ();
-		aux.setText("Mensaje 2");
-		save(aux);
-	}
-	
-	
-	@Override
-	public Collection<Greeting> findAll() {
-		// TODO Auto-generated method stub
-		return greetingMap.values();
-	}
+	@Autowired
+	GreetingRepository greetingRepository;
+
+	@Autowired
+	DozerBeanMapper mapper;
 
 	@Override
-	public Greeting FindOne(BigInteger id) {
+	public Collection<GreetingDTO> findAll() {
 		// TODO Auto-generated method stub
-		return greetingMap.get(id);
+		Collection<GreetingEntity> greetings = greetingRepository.findAll();
+		return DozerUtil.mapCollection(mapper, greetings, GreetingDTO.class);
 	}
-
 	@Override
-	public Greeting create(Greeting greeting) {
+	public GreetingDTO FindOne(BigInteger id) {
 		// TODO Auto-generated method stub
-		return save(greeting);
+		GreetingEntity greeting = greetingRepository.findOne(id);
+		GreetingDTO output = mapper.map(greeting, GreetingDTO.class);
+		return output;
 	}
-
 	@Override
-	public Greeting update(Greeting greeting) {
+	public GreetingDTO create(GreetingDTO greeting) {
 		// TODO Auto-generated method stub
-		return save(greeting);
+		return mapper.map(
+				greetingRepository.save(
+						mapper.map(greeting, GreetingEntity.class)),
+				GreetingDTO.class);
 	}
-
+	@Override
+	public GreetingDTO update(GreetingDTO greeting) {
+		// TODO Auto-generated method stub
+		return mapper.map(
+				greetingRepository.save(
+						mapper.map(greeting, GreetingEntity.class)),
+				GreetingDTO.class);
+	}
 	@Override
 	public void delete(BigInteger id) {
 		// TODO Auto-generated method stub
-		delete(id);
+		greetingRepository.delete(id);
 	}
 
 }

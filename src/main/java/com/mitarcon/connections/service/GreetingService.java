@@ -3,13 +3,13 @@ package com.mitarcon.connections.service;
 import java.math.BigInteger;
 import java.util.Collection;
 
-import com.mitarcon.connections.domain.Greeting;
+import com.mitarcon.connections.service.dto.GreetingDTO;
 
 public interface GreetingService {
 
-	Collection<Greeting> findAll();
-	Greeting FindOne(BigInteger id);
-	Greeting create(Greeting greeting);
-	Greeting update(Greeting greeting);
+	Collection<GreetingDTO> findAll();
+	GreetingDTO FindOne(BigInteger id);
+	GreetingDTO create(GreetingDTO greeting);
+	GreetingDTO update(GreetingDTO greeting);
 	void delete(BigInteger id);
 }

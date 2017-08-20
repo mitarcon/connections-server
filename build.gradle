@@ -19,11 +19,28 @@ sourceCompatibility = 1.8
 
 repositories {
 	mavenCentral()
+	maven { url "https://repository.jboss.org/nexus/content/repositories/releases" }
 }
 
 
 dependencies {
 	compile('org.springframework.boot:spring-boot-starter-web')
+
+//	JPA	
+	compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("com.h2database:h2")
+    
+//	Lombok for generate code
 	compileOnly ('org.projectlombok:lombok:1.16.18')
+	
 	testCompile('org.springframework.boot:spring-boot-starter-test')
+	
+//	JDBC drivers
+	runtime("org.hsqldb:hsqldb")
+	
+//	https://mvnrepository.com/artifact/net.sf.dozer/dozer
+//	Dozer - Mapper object to object
+	compile('net.sf.dozer:dozer:5.4.0') {
+		exclude group: 'org.slf4j'
+	}
 }
